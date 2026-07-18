@@ -11,21 +11,22 @@
     z-index: 50;
 }
 
+/* Full-screen backdrop fully transparent (no dark, no blur). */
 #radial-blur {
     position: absolute;
     inset: 0;
-    background: rgba(6, 9, 13, 0.35);
-    -webkit-backdrop-filter: blur(var(--bx-blur));
-    backdrop-filter: blur(var(--bx-blur));
-    opacity: 0;
-    transition: opacity var(--bx-menu-open) var(--bx-ease-out);
+    background: transparent;
 }
-#radial-root.bx-open #radial-blur { opacity: 1; }
 
 #radial-ring {
     position: relative;
     width: 440px;
     height: 440px;
+    /* Circular panel sized to the ring, ~25% opacity (see --bx-panel-bg). */
+    border-radius: 50%;
+    background: var(--bx-panel-bg);
+    -webkit-backdrop-filter: blur(var(--bx-panel-blur));
+    backdrop-filter: blur(var(--bx-panel-blur));
     transform: scale(0.86);
     opacity: 0;
     transition:

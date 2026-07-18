@@ -2,29 +2,29 @@
    passport.css — the request prompt (countdown) and the passport document.
 --------------------------------------------------------------------------- */
 
-/* ----- REQUEST PROMPT (focus-less, top-right premium card) ----- */
+/* ----- REQUEST PROMPT (focus-less, top-CENTER premium card) ----- */
 #passport-prompt {
     position: absolute;
-    top: 24px;
-    right: 24px;
-    width: 340px;
+    top: 26px;
+    left: 50%;
+    width: 360px;
     z-index: 60;
-    transform: translateX(120%);
+    transform: translate(-50%, -140%);   /* hidden above the screen */
     opacity: 0;
     transition:
         transform var(--bx-menu-open) var(--bx-ease-out),
         opacity var(--bx-menu-open) var(--bx-ease-out);
 }
-#passport-prompt.bx-show { transform: translateX(0); opacity: 1; }
+#passport-prompt.bx-show { transform: translate(-50%, 0); opacity: 1; }
 
 .bx-prompt-card {
     position: relative;
     padding: 16px 18px;
     border-radius: 16px;
     overflow: hidden;
-    background: color-mix(in srgb, var(--bx-surface) 62%, transparent);
-    -webkit-backdrop-filter: blur(var(--bx-blur));
-    backdrop-filter: blur(var(--bx-blur));
+    background: var(--bx-panel-bg);
+    -webkit-backdrop-filter: blur(var(--bx-panel-blur));
+    backdrop-filter: blur(var(--bx-panel-blur));
     border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
     box-shadow: var(--bx-shadow);
 }
@@ -95,6 +95,7 @@
 .bx-decline:hover { filter: brightness(1.15); }
 
 /* ----- PASSPORT DOCUMENT (focus modal) ----- */
+/* No full-screen backdrop — only the panel itself carries a tint. */
 #passport-modal {
     position: absolute;
     inset: 0;
@@ -102,9 +103,7 @@
     align-items: center;
     justify-content: center;
     z-index: 70;
-    background: rgba(6, 9, 13, 0.4);
-    -webkit-backdrop-filter: blur(calc(var(--bx-blur) * 0.6));
-    backdrop-filter: blur(calc(var(--bx-blur) * 0.6));
+    background: transparent;
     opacity: 0;
     transition: opacity var(--bx-menu-open) var(--bx-ease-out);
 }
@@ -120,9 +119,9 @@
     transition:
         transform var(--bx-menu-open) var(--bx-ease-out),
         opacity var(--bx-menu-open) var(--bx-ease-out);
-    background: color-mix(in srgb, var(--bx-surface) 78%, transparent);
-    -webkit-backdrop-filter: blur(var(--bx-blur));
-    backdrop-filter: blur(var(--bx-blur));
+    background: var(--bx-panel-bg);
+    -webkit-backdrop-filter: blur(var(--bx-panel-blur));
+    backdrop-filter: blur(var(--bx-panel-blur));
     border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
     box-shadow: var(--bx-shadow);
 }

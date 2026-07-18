@@ -24,7 +24,15 @@ CreateThread(function()
         local tracked = Bitirim.Proximity.tracked
         local target = Bitirim.Proximity.target
 
-        if tracked and #tracked > 0 then
+        -- Hide everything while the pause menu / map is open (NUI renders on
+        -- top of the map otherwise).
+        if IsPauseMenuActive() then
+            if wasActive then
+                SendNUIMessage({ action = 'indicators', items = {} })
+                wasActive = false
+            end
+            Wait(200)
+        elseif tracked and #tracked > 0 then
             local items = {}
             for i = 1, #tracked do
                 local t = tracked[i]
