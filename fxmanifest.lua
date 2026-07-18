@@ -67,7 +67,7 @@ files {
     'web/index.html',
     'web/css/*.css',
     'web/js/*.js',
-    'web/assets/*.svg',
-    'web/assets/*.png',
-    'web/fonts/*.ttf',
+    -- NOTE: UI icons are inlined in web/js/radial.js and web/js/passport.js,
+    -- so no external asset/font files are shipped. If you later add real
+    -- images/fonts, drop them in web/assets or web/fonts and re-add a glob here.
 }
