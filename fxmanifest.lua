@@ -44,6 +44,7 @@ shared_scripts {
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/modules/players.lua',
+    'server/modules/playerid.lua',
     'server/modules/identity.lua',
     'server/modules/passport.lua',
     'server/modules/debug.lua',   -- loaded but self-disables unless Config.debug

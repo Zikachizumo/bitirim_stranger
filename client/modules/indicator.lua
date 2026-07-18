@@ -17,6 +17,7 @@ local labelBone = perfCfg.labelBone
 local labelOff = perfCfg.labelHeightOffset
 local keyBone = perfCfg.keyBone
 local keyOff = perfCfg.keyHeightOffset
+local showId = Cfg.playerId.enabled and Cfg.playerId.showOnIndicator
 
 CreateThread(function()
     local wasActive = false
@@ -46,9 +47,16 @@ CreateThread(function()
                         local chest = GetPedBoneCoords(ped, keyBone, 0.0, 0.0, keyOff)
                         local kok, kx, ky = GetScreenCoordFromWorldCoord(chest.x, chest.y, chest.z)
                         local label = Bitirim.Identity.label(t.serverId)
+                        -- Permanent public number, replicated by the server via
+                        -- a statebag. Nil until it arrives; the NUI then simply
+                        -- omits the ID line rather than showing a session id.
+                        local pid = nil
+                        if showId then
+                            pid = Player(t.serverId).state.bitirimId
+                        end
                         items[#items + 1] = {
                             id = t.serverId,
-                            sid = t.serverId,
+                            sid = pid,
                             name = label.name,
                             known = label.known,
                             labelX = lx, labelY = ly,

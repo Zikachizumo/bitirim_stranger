@@ -142,6 +142,11 @@ function Identity.onReady(source)
     cidBySource[source] = cid
     loadKnown(cid)
 
+    -- Issue / restore this character's permanent public number.
+    if Bitirim.PlayerId then
+        Bitirim.PlayerId.attach(source, cid)
+    end
+
     reconcile(source)
     Utils.log('identity', ('ready cid=%s src=%s name=%s'):format(cid, source, name))
 end
