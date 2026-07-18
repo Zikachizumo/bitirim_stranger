@@ -187,17 +187,58 @@ function Identity.learn(ownerSource, knownSource)
     return true
 end
 
---- Remove a relationship (forget). Optional / future.
+--- Citizenid of an online source (nil if not ready).
+function Identity.getCitizenId(source)
+    return cidBySource[source]
+end
+
+--- Remove a single relationship. The owner's client cache is cleared too, so
+--- the label reverts to Stranger immediately instead of after a reconnect.
 function Identity.forget(ownerSource, knownCid)
     local ownerCid = cidBySource[ownerSource]
-    if not ownerCid then return false end
+    if not ownerCid or not knownCid then return false end
+
     local set = loadKnown(ownerCid)
     if set then set[knownCid] = nil end
+
     if Cfg.persist then
         MySQL.query('DELETE FROM bitirim_known_identities WHERE owner_citizenid = ? AND known_citizenid = ?',
             { ownerCid, knownCid })
     end
+
+    local info = online[knownCid]
+    if info then
+        TriggerClientEvent('bitirim:client:conceal', ownerSource, info.source)
+    end
+
+    Utils.log('identity', ('forget owner=%s known=%s'):format(ownerCid, knownCid))
     return true
+end
+
+--- Wipe every relationship this character has learned. Handy for re-testing
+--- the stranger flow without wiping the database by hand.
+--- @return number how many were removed
+function Identity.forgetAll(ownerSource)
+    local ownerCid = cidBySource[ownerSource]
+    if not ownerCid then return 0 end
+
+    local set = loadKnown(ownerCid)
+    local count = 0
+    for knownCid in pairs(set) do
+        count = count + 1
+        local info = online[knownCid]
+        if info then
+            TriggerClientEvent('bitirim:client:conceal', ownerSource, info.source)
+        end
+    end
+
+    knownMap[ownerCid] = {}
+    if Cfg.persist then
+        MySQL.query('DELETE FROM bitirim_known_identities WHERE owner_citizenid = ?', { ownerCid })
+    end
+
+    Utils.log('identity', ('forgetAll owner=%s removed=%d'):format(ownerCid, count))
+    return count
 end
 
 ---------------------------------------------------------------------------

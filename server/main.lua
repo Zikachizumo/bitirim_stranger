@@ -98,21 +98,46 @@ end
 -- FORGET COMMAND (optional / config-gated)
 ---------------------------------------------------------------------------
 if Bitirim.Config.identity.allowForget and Bitirim.Config.identity.forgetCommand then
-    -- Minimal stub: full "select from known people" menu is future UI work.
-    -- Usage: /forget <citizenid>
-    RegisterCommand(Bitirim.Config.identity.forgetCommand, function(source, args)
-        local knownCid = args[1]
-        if not knownCid then
-            TriggerClientEvent('bitirim:client:notify', source, {
-                type = 'inform', title = 'Forget',
-                description = 'Usage: /' .. Bitirim.Config.identity.forgetCommand .. ' <citizenid>',
-            })
+    local cmd = Bitirim.Config.identity.forgetCommand
+
+    -- Usage:  /forget <playerId>   (the number shown above their head)
+    --         /forget <citizenid>  (still accepted)
+    --         /forget all          (wipe everyone you know)
+    RegisterCommand(cmd, function(source, args)
+        local src = source
+        local function reply(msgType, description)
+            TriggerClientEvent('bitirim:client:notify', src,
+                { type = msgType, title = 'Forget', description = description })
+        end
+
+        local arg = args[1]
+        if not arg then
+            reply('inform', ('Usage: /%s <playerId | citizenid | all>'):format(cmd))
             return
         end
-        Identity.forget(source, knownCid)
-        TriggerClientEvent('bitirim:client:notify', source, {
-            type = 'success', title = 'Forget', description = 'Identity forgotten.',
-        })
+
+        if arg:lower() == 'all' then
+            local removed = Identity.forgetAll(src)
+            reply('success', ('Forgot %d %s.'):format(removed, removed == 1 and 'person' or 'people'))
+            return
+        end
+
+        -- Prefer the permanent player id — it's the number players actually see.
+        local knownCid
+        local number = tonumber(arg)
+        if number and Bitirim.PlayerId then
+            local targetSrc = Bitirim.PlayerId.getSourceByNumber(number)
+            if targetSrc then
+                knownCid = Identity.getCitizenId(targetSrc)
+            end
+        end
+        knownCid = knownCid or arg   -- fall back to treating it as a citizenid
+
+        if Identity.forget(src, knownCid) then
+            reply('success', ('Forgot %s. They are a stranger again.'):format(arg))
+        else
+            reply('error', 'Could not forget that player.')
+        end
     end, false)
 end
 
