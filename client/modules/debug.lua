@@ -59,4 +59,14 @@ RegisterCommand('bx_ui', function()
     SendNUIMessage({ action = 'passportPromptClose' })
 end, false)
 
+-- Diagnose the displayed ID: prints each tracked player's resolved server id.
+RegisterCommand('bx_scan', function()
+    local tracked = (Bitirim.Proximity and Bitirim.Proximity.tracked) or {}
+    print(('[bitirim:debug] tracked=%d'):format(#tracked))
+    for _, t in ipairs(tracked) do
+        print(('  serverId=%s (type %s)  ped=%s  dist=%.1f'):format(
+            tostring(t.serverId), type(t.serverId), tostring(t.ped), t.dist))
+    end
+end, false)
+
 Utils.warn('debug', 'DEBUG commands active: /bx_radial /bx_prompt /bx_passport /bx_ui')

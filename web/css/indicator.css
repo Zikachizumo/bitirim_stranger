@@ -1,6 +1,7 @@
 /* ---------------------------------------------------------------------------
-   indicator.css — the floating, world-anchored player indicator.
-   Positioned in screen space by JS (left/top %), billboarded by nature (2D).
+   indicator.css — floating player indicator. TWO independent screen-space
+   elements per player, positioned by JS. No animations at all: elements are
+   pinned in world space and simply track the character.
 --------------------------------------------------------------------------- */
 
 #indicator-layer {
@@ -10,35 +11,17 @@
     overflow: hidden;
 }
 
-.bx-indicator {
+/* ----- Name / ID label: sits just above the head ----- */
+.bx-ind-label {
     position: absolute;
-    /* left/top set inline by JS; translate centers on the anchor point. */
-    transform: translate(-50%, -50%) scale(var(--bx-s, 1));
-    transform-origin: center bottom;
+    /* left/top set inline by JS; anchor point is above the head, and the card
+       floats above that point. */
+    transform: translate(-50%, -100%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    opacity: 0;
-    transition:
-        opacity var(--bx-fade-in) var(--bx-ease-out),
-        transform var(--bx-scale-spring) var(--bx-ease-out);
-    will-change: transform, opacity, left, top;
-}
-
-.bx-indicator.bx-in { opacity: 1; }
-.bx-indicator.bx-out {
-    opacity: 0;
-    transition: opacity var(--bx-fade-out) var(--bx-ease-out);
-}
-
-/* Name / ID card. */
-.bx-ind-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 7px 14px;
-    border-radius: 12px;
+    padding: 6px 12px;
+    border-radius: 10px;
     background: color-mix(in srgb, var(--bx-bg) 62%, transparent);
     -webkit-backdrop-filter: blur(var(--bx-ind-blur));
     backdrop-filter: blur(var(--bx-ind-blur));
@@ -55,7 +38,7 @@
     color: var(--bx-stranger);
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
-.bx-indicator.bx-known .bx-ind-name {
+.bx-ind-label.bx-known .bx-ind-name {
     color: var(--bx-known);
 }
 
@@ -66,24 +49,11 @@
     margin-top: 1px;
 }
 
-/* Small anchor dot under the card. */
-.bx-ind-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--bx-stranger);
-    box-shadow: 0 0 10px 1px color-mix(in srgb, var(--bx-stranger) 70%, transparent);
-    opacity: 0.85;
-}
-.bx-indicator.bx-known .bx-ind-dot {
-    background: var(--bx-known);
-    box-shadow: 0 0 12px 2px var(--bx-glow-color);
-}
-
-/* Circular G interaction button (only on the active target). */
+/* ----- Circular G button: chest/waist height, target only ----- */
 .bx-ind-key {
-    display: none;
-    margin-top: 2px;
+    position: absolute;
+    /* left/top set inline by JS; centered on the chest anchor. */
+    transform: translate(-50%, -50%);
     width: 34px;
     height: 34px;
     border-radius: 50%;
@@ -96,19 +66,5 @@
     -webkit-backdrop-filter: blur(var(--bx-ind-blur));
     backdrop-filter: blur(var(--bx-ind-blur));
     border: 1px solid color-mix(in srgb, var(--bx-accent) 55%, transparent);
-    box-shadow: 0 0 var(--bx-glow) color-mix(in srgb, var(--bx-glow-color) 60%, transparent);
-    animation: bx-breathe var(--bx-breathing) var(--bx-ease-in-out) infinite;
-}
-
-.bx-indicator.bx-target .bx-ind-key { display: flex; }
-
-@keyframes bx-breathe {
-    0%, 100% {
-        box-shadow: 0 0 var(--bx-glow) color-mix(in srgb, var(--bx-glow-color) 45%, transparent);
-        transform: scale(1);
-    }
-    50% {
-        box-shadow: 0 0 var(--bx-glow-pulse) color-mix(in srgb, var(--bx-glow-color) 85%, transparent);
-        transform: scale(1.06);
-    }
+    box-shadow: 0 0 var(--bx-glow) color-mix(in srgb, var(--bx-glow-color) 55%, transparent);
 }
