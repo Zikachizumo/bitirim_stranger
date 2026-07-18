@@ -58,8 +58,15 @@
             rec.label.style.top = (it.labelY * 100) + '%';
             rec.label.classList.toggle('bx-known', !!it.known);
             if (rec.name.textContent !== it.name) rec.name.textContent = it.name;
-            const idText = 'ID: ' + it.sid;
-            if (rec.id.textContent !== idText) rec.id.textContent = idText;
+            // The permanent number may not have replicated yet — omit the line
+            // entirely rather than showing a placeholder or a session id.
+            if (it.sid === undefined || it.sid === null) {
+                rec.id.style.display = 'none';
+            } else {
+                rec.id.style.display = '';
+                const idText = 'ID: ' + it.sid;
+                if (rec.id.textContent !== idText) rec.id.textContent = idText;
+            }
 
             // G key — chest/waist, target only.
             if (it.isTarget && it.keyOn) {

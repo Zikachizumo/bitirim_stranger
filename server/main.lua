@@ -45,6 +45,56 @@ RegisterNetEvent('bitirim:server:passportDecline', function(requestId)
 end)
 
 ---------------------------------------------------------------------------
+-- ADMIN: /whois <number>
+-- Resolves a permanent player number back to its character. ACE-gated, so it
+-- works with any admin setup:  add_ace group.admin bitirim.admin allow
+---------------------------------------------------------------------------
+local idCfg = Bitirim.Config.playerId
+if idCfg.enabled and idCfg.allowAdminCommands and idCfg.adminCommand then
+    RegisterCommand(idCfg.adminCommand, function(source, args)
+        local src = source
+        local function reply(msg)
+            if src > 0 then
+                TriggerClientEvent('bitirim:client:notify', src,
+                    { type = 'inform', title = 'Whois', description = msg, duration = 6000 })
+            else
+                print('[bitirim:whois] ' .. msg)
+            end
+        end
+
+        -- src 0 is the server console, which is always allowed.
+        if src > 0 and not IsPlayerAceAllowed(src, idCfg.adminAce) then
+            reply('You do not have permission to use this.')
+            return
+        end
+
+        local number = tonumber(args[1])
+        if not number then
+            reply(('Usage: /%s <number>'):format(idCfg.adminCommand))
+            return
+        end
+
+        local row = Bitirim.PlayerId.lookup(number)
+        if not row then
+            reply(('No character has ever held ID %d.'):format(number))
+            return
+        end
+
+        local onlineSrc = Bitirim.PlayerId.getSourceByNumber(number)
+        local status
+        if row.deleted_at then
+            status = 'character deleted (number retired)'
+        elseif onlineSrc then
+            status = ('online as server id %d — %s'):format(onlineSrc, Bitirim.Players.getFullName(onlineSrc) or '?')
+        else
+            status = 'offline'
+        end
+
+        reply(('ID %d -> citizenid %s (%s)'):format(row.number, row.citizenid, status))
+    end, false)
+end
+
+---------------------------------------------------------------------------
 -- FORGET COMMAND (optional / config-gated)
 ---------------------------------------------------------------------------
 if Bitirim.Config.identity.allowForget and Bitirim.Config.identity.forgetCommand then

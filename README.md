@@ -8,6 +8,7 @@ Premium, standalone player-interaction, identity-discovery & passport system for
 
 - **Floating player indicator** — glassmorphism card anchored to the waist bone, billboarded to camera, with smooth fade in/out and distance-based scaling.
 - **Stranger system** — players see `Stranger / ID: n` until identities are shared. Privacy-preserving and one-directional.
+- **Permanent player IDs** — each character is issued a number once, on first login. It survives reconnects and restarts and is **never reused**: registry rows are kept forever (soft-deleted) and AUTO_INCREMENT never reissues, so deleting #3 retires it and the next character gets #4. Admin lookup via `/whois <number>` (ACE: `bitirim.admin`).
 - **Circular G radial menu** — animated, blurred background, mouse + ESC support, fully modular (`config/menu.lua`).
 - **Passport request flow** — one active request per sender/target, 10s countdown, accept/decline, anti-spam cooldown.
 - **Persistent known-people** — accepted identities survive reconnect / restart / character reload (oxmysql).
