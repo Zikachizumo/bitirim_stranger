@@ -106,5 +106,6 @@ RegisterNUICallback('bitirim:passportClose', function(_, cb)
     cb('ok')
 end)
 
-Bitirim.Passport = Passport
+-- Exported as PassportClient so config/passport.lua keeps owning Bitirim.Passport.
+Bitirim.PassportClient = Passport
 Utils.log('passport', 'client passport module ready')

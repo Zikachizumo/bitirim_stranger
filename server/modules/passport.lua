@@ -190,4 +190,6 @@ AddEventHandler('playerDropped', function()
     onDrop(source)
 end)
 
-Bitirim.Passport = Passport
+-- NOTE: exported as PassportService, NOT Bitirim.Passport, because
+-- config/passport.lua already owns Bitirim.Passport (the document config).
+Bitirim.PassportService = Passport
