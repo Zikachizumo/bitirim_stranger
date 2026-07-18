@@ -114,6 +114,22 @@ Bitirim.Config = {
     },
 
     ---------------------------------------------------------------------------
+    -- IDENTITY-AWARE CHAT
+    -- Each message is re-broadcast per receiver, so everyone sees the sender
+    -- labelled by what THEY personally know — exactly like the floating name.
+    ---------------------------------------------------------------------------
+    chat = {
+        enabled = true,
+
+        -- Rendered as a single line. Order of the placeholders:
+        --   %s = name or the stranger label
+        --   %s = permanent player id
+        --   %s = the message
+        -- FiveM colour codes (^0-^9) work here.
+        format = '%s (%s): %s',
+    },
+
+    ---------------------------------------------------------------------------
     -- IDENTITY / KNOWN-PEOPLE
     ---------------------------------------------------------------------------
     identity = {
