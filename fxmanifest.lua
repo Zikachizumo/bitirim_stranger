@@ -46,6 +46,7 @@ server_scripts {
     'server/modules/players.lua',
     'server/modules/identity.lua',
     'server/modules/passport.lua',
+    'server/modules/debug.lua',   -- loaded but self-disables unless Config.debug
     'server/main.lua',
 }
 
@@ -56,6 +57,7 @@ client_scripts {
     'client/modules/interaction.lua',
     'client/modules/radial.lua',
     'client/modules/passport.lua',
+    'client/modules/debug.lua',   -- loaded but self-disables unless Config.debug
     'client/main.lua',
 }
 
