@@ -22,9 +22,8 @@
     position: relative;
     width: 440px;
     height: 440px;
-    /* Circular panel sized to the ring, ~25% opacity (see --bx-panel-bg). */
-    border-radius: 50%;
-    background: var(--bx-panel-bg);
+    /* Fully transparent — only the item chips and the centre hub carry a tint. */
+    background: transparent;
     transform: scale(0.86);
     opacity: 0;
     transition:
@@ -57,9 +56,8 @@
     justify-content: center;
     text-align: center;
     padding: 12px;
-    /* Transparent so the ring's dark 25% tint shows through uniformly
-       (avoids a doubled, darker centre from stacking two panels). */
-    background: transparent;
+    /* Black, 75% opaque (the ring itself is transparent now). */
+    background: var(--bx-panel-bg);
     border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
     box-shadow: var(--bx-shadow), inset 0 0 24px rgba(79, 195, 247, 0.08);
     z-index: 2;
@@ -91,7 +89,7 @@
     gap: 6px;
     border-radius: 20px;
     cursor: pointer;
-    background: color-mix(in srgb, var(--bx-surface) 55%, transparent);
+    background: var(--bx-panel-bg);
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
     transition:
@@ -116,10 +114,11 @@
 .bx-radial-item:active { transform: translate(var(--x), var(--y)) scale(0.97); }
 
 .bx-radial-item.bx-disabled {
-    opacity: 0.4 !important;
     cursor: not-allowed;
-    filter: grayscale(0.6);
+    /* Distinguished by desaturation only — text/icons keep full opacity. */
+    filter: grayscale(0.85);
 }
+.bx-radial-item.bx-disabled .bx-radial-icon { color: var(--bx-text-muted); }
 .bx-radial-item.bx-disabled:hover {
     border-color: rgba(255, 255, 255, 0.12);
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
@@ -153,7 +152,4 @@
     font-size: 12px;
     color: var(--bx-text-muted);
     letter-spacing: 1px;
-    opacity: 0;
-    transition: opacity var(--bx-menu-open) ease;
 }
-#radial-root.bx-open #radial-hint { opacity: 0.8; }
