@@ -35,6 +35,28 @@ This resource **never modifies** any `qbx_*` resource.
 3. The database table `bitirim_known_identities` is **auto-created** on start.
    (Optional manual import: `server/database/schema.sql`.)
 
+## Updating (Ubuntu + txAdmin)
+
+On the server, pull the latest code:
+
+```bash
+cd '/opt/fivem/artifacts/txData/Qbox_57FBFD.base/resources/[bitirim]/bitirim_stranger'
+git pull
+```
+
+Then, in the txAdmin **Live Console**:
+
+```
+restart bitirim_stranger
+```
+
+Notes:
+- `restart` is enough for Lua/CSS/JS changes. Players may need to rejoin only if
+  a `RegisterKeyMapping` default changed.
+- New database tables are created automatically on start — no manual SQL.
+- To see the diagnostic logs and the `/bx_*` test commands, set
+  `debug = true` in `config/config.lua`, then restart.
+
 ## Configuration
 
 | File | Controls |
