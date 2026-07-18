@@ -25,10 +25,11 @@
     --bx-border-opacity:0.18;
     --bx-shadow:        0 10px 30px rgba(0, 0, 0, 0.45);
 
-    /* Window panels (radial ring, passport, request prompt).
-       ~25% opacity tint over transparent. Raise the 25% for a more solid
-       panel, lower it for more see-through. Full-screen backdrops are removed. */
-    --bx-panel-bg:      color-mix(in srgb, var(--bx-surface) 25%, transparent);
+    /* Window panels (radial ring + center, passport, request prompt).
+       Dark colour, 25% transparent (i.e. 75% opaque). Lower the 75% for a
+       more see-through panel, raise it toward 100% for a more solid one.
+       Full-screen backdrops are removed; only the panel carries this tint. */
+    --bx-panel-bg:      color-mix(in srgb, var(--bx-surface) 75%, transparent);
     --bx-panel-blur:    10px;
 
     /* Glow */

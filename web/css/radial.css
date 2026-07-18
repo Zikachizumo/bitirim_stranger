@@ -57,7 +57,9 @@
     justify-content: center;
     text-align: center;
     padding: 12px;
-    background: color-mix(in srgb, var(--bx-surface) 70%, transparent);
+    /* Transparent so the ring's dark 25% tint shows through uniformly
+       (avoids a doubled, darker centre from stacking two panels). */
+    background: transparent;
     border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
     box-shadow: var(--bx-shadow), inset 0 0 24px rgba(79, 195, 247, 0.08);
     z-index: 2;
