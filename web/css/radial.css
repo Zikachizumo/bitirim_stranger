@@ -105,10 +105,10 @@
 }
 
 .bx-radial-item:hover {
-    border-color: color-mix(in srgb, var(--bx-accent) 70%, transparent);
-    background: color-mix(in srgb, var(--bx-surface) 78%, transparent);
+    border-color: rgba(79, 195, 247, 0.7);
+    background: rgba(0, 0, 0, 0.85);
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5),
-                0 0 var(--bx-glow) color-mix(in srgb, var(--bx-glow-color) 55%, transparent);
+                0 0 var(--bx-glow) rgba(79, 195, 247, 0.55);
     transform: translate(var(--x), var(--y)) scale(1.06);
 }
 .bx-radial-item:active { transform: translate(var(--x), var(--y)) scale(0.97); }

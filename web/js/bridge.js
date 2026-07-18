@@ -34,6 +34,19 @@
         Bridge.handlers[action] = fn;
     };
 
+    /** "#RRGGBB" + alpha -> "rgba(r, g, b, a)". Returns null on bad input. */
+    function hexToRgba(hex, alpha) {
+        if (typeof hex !== 'string') return null;
+        let h = hex.trim().replace('#', '');
+        if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+        if (h.length !== 6 || /[^0-9a-fA-F]/.test(h)) return null;
+        const r = parseInt(h.slice(0, 2), 16);
+        const g = parseInt(h.slice(2, 4), 16);
+        const b = parseInt(h.slice(4, 6), 16);
+        const a = Math.max(0, Math.min(1, Number(alpha)));
+        return `rgba(${r}, ${g}, ${b}, ${isNaN(a) ? 0.75 : a})`;
+    }
+
     /** Apply the theme + config pushed from Lua onto CSS custom properties. */
     Bridge.applyTheme = function (theme, config) {
         if (config) Bridge.config = config;
@@ -59,9 +72,13 @@
         set('--bx-danger', c.danger);
         set('--bx-warning', c.warning);
 
-        if (g.blur !== undefined) set('--bx-blur', g.blur + 'px');
-        if (g.indicatorBlur !== undefined) set('--bx-ind-blur', g.indicatorBlur + 'px');
-        if (g.opacity !== undefined) set('--bx-glass-opacity', g.opacity);
+        // FiveM's CEF supports neither color-mix() nor a usable backdrop-filter,
+        // so the panel fill is resolved here into a plain rgba() string.
+        const panelRgba = hexToRgba(
+            g.panelColor || '#000000',
+            g.panelOpacity !== undefined ? g.panelOpacity : 0.75
+        );
+        if (panelRgba) set('--bx-panel-bg', panelRgba);
         if (g.borderOpacity !== undefined) set('--bx-border-opacity', g.borderOpacity);
         set('--bx-shadow', g.shadow);
 

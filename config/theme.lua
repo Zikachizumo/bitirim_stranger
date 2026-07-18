@@ -27,11 +27,13 @@ Bitirim.Theme = {
         warning        = '#E3A008',
     },
 
-    -- Glassmorphism tuning.
+    -- Panel / surface tuning.
+    -- NOTE: FiveM's CEF does NOT support CSS color-mix() or usable
+    -- backdrop-filter, so panel colours are resolved to plain rgba() in
+    -- web/js/bridge.js from `panelColor` + `panelOpacity`.
     glass = {
-        blur          = 14,          -- px backdrop blur (menu background)
-        indicatorBlur = 8,           -- px blur for the floating indicator card
-        opacity       = 0.55,        -- glass fill opacity (0-1)
+        panelColor    = '#000000',   -- window panel fill (passport, prompt, radial chips)
+        panelOpacity  = 0.75,        -- 0-1. 0.75 = 75% opaque / 25% transparent
         borderOpacity = 0.18,        -- subtle border highlight
         shadow        = '0 10px 30px rgba(0,0,0,0.45)',
     },

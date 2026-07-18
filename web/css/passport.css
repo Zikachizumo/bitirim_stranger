@@ -80,14 +80,14 @@
     border: 1px solid rgba(255, 255, 255, 0.18);
 }
 .bx-accept {
-    background: color-mix(in srgb, var(--bx-success) 22%, transparent);
-    border-color: color-mix(in srgb, var(--bx-success) 60%, transparent);
+    background: rgba(76, 175, 125, 0.22);
+    border-color: rgba(76, 175, 125, 0.6);
     color: #d8f6e6;
 }
 .bx-accept:hover { filter: brightness(1.15); }
 .bx-decline {
-    background: color-mix(in srgb, var(--bx-danger) 20%, transparent);
-    border-color: color-mix(in srgb, var(--bx-danger) 55%, transparent);
+    background: rgba(229, 83, 75, 0.2);
+    border-color: rgba(229, 83, 75, 0.55);
     color: #ffdedb;
 }
 .bx-decline:hover { filter: brightness(1.15); }
@@ -126,7 +126,7 @@
 .bx-pp-header {
     padding: 18px 24px;
     background: linear-gradient(135deg,
-        color-mix(in srgb, var(--bx-accent) 30%, transparent),
+        rgba(79, 195, 247, 0.3),
         transparent);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -176,7 +176,7 @@
     font-weight: 700;
     cursor: pointer;
     color: var(--bx-text);
-    background: color-mix(in srgb, var(--bx-surface) 80%, transparent);
+    background: rgba(0, 0, 0, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.16);
     transition: transform var(--bx-press) ease, filter 160ms ease;
 }
