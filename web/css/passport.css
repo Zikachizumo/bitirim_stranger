@@ -1,0 +1,189 @@
+/* ---------------------------------------------------------------------------
+   passport.css — the request prompt (countdown) and the passport document.
+--------------------------------------------------------------------------- */
+
+/* ----- REQUEST PROMPT (focus-less, top-right premium card) ----- */
+#passport-prompt {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 340px;
+    z-index: 60;
+    transform: translateX(120%);
+    opacity: 0;
+    transition:
+        transform var(--bx-menu-open) var(--bx-ease-out),
+        opacity var(--bx-menu-open) var(--bx-ease-out);
+}
+#passport-prompt.bx-show { transform: translateX(0); opacity: 1; }
+
+.bx-prompt-card {
+    position: relative;
+    padding: 16px 18px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--bx-surface) 62%, transparent);
+    -webkit-backdrop-filter: blur(var(--bx-blur));
+    backdrop-filter: blur(var(--bx-blur));
+    border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
+    box-shadow: var(--bx-shadow);
+}
+.bx-prompt-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.bx-prompt-ring { position: relative; width: 46px; height: 46px; flex: 0 0 auto; }
+.bx-prompt-ring svg { transform: rotate(-90deg); }
+.bx-prompt-ring circle { fill: none; stroke-width: 4; }
+.bx-prompt-ring .bx-ring-bg { stroke: rgba(255, 255, 255, 0.12); }
+.bx-prompt-ring .bx-ring-fg {
+    stroke: var(--bx-accent);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 100ms linear;
+    filter: drop-shadow(0 0 4px var(--bx-glow-color));
+}
+.bx-prompt-count {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--bx-text);
+}
+.bx-prompt-title { font-size: 13px; font-weight: 700; color: var(--bx-text); }
+.bx-prompt-sub { font-size: 12px; color: var(--bx-text-muted); margin-top: 2px; }
+.bx-prompt-sub b { color: var(--bx-accent-soft); }
+
+.bx-prompt-actions { display: flex; gap: 10px; }
+.bx-prompt-btn {
+    flex: 1;
+    padding: 9px 0;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform var(--bx-press) ease, filter 160ms ease, background 160ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+.bx-prompt-btn:active { transform: scale(0.96); }
+.bx-prompt-btn .bx-kbd {
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.bx-accept {
+    background: color-mix(in srgb, var(--bx-success) 22%, transparent);
+    border-color: color-mix(in srgb, var(--bx-success) 60%, transparent);
+    color: #d8f6e6;
+}
+.bx-accept:hover { filter: brightness(1.15); }
+.bx-decline {
+    background: color-mix(in srgb, var(--bx-danger) 20%, transparent);
+    border-color: color-mix(in srgb, var(--bx-danger) 55%, transparent);
+    color: #ffdedb;
+}
+.bx-decline:hover { filter: brightness(1.15); }
+
+/* ----- PASSPORT DOCUMENT (focus modal) ----- */
+#passport-modal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 70;
+    background: rgba(6, 9, 13, 0.4);
+    -webkit-backdrop-filter: blur(calc(var(--bx-blur) * 0.6));
+    backdrop-filter: blur(calc(var(--bx-blur) * 0.6));
+    opacity: 0;
+    transition: opacity var(--bx-menu-open) var(--bx-ease-out);
+}
+#passport-modal.bx-show { opacity: 1; }
+
+.bx-passport {
+    width: 560px;
+    max-width: 92vw;
+    border-radius: 20px;
+    overflow: hidden;
+    transform: translateY(18px) scale(0.96);
+    opacity: 0;
+    transition:
+        transform var(--bx-menu-open) var(--bx-ease-out),
+        opacity var(--bx-menu-open) var(--bx-ease-out);
+    background: color-mix(in srgb, var(--bx-surface) 78%, transparent);
+    -webkit-backdrop-filter: blur(var(--bx-blur));
+    backdrop-filter: blur(var(--bx-blur));
+    border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
+    box-shadow: var(--bx-shadow);
+}
+#passport-modal.bx-show .bx-passport { transform: translateY(0) scale(1); opacity: 1; }
+
+.bx-pp-header {
+    padding: 18px 24px;
+    background: linear-gradient(135deg,
+        color-mix(in srgb, var(--bx-accent) 30%, transparent),
+        transparent);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.bx-pp-title { font-size: 18px; font-weight: 800; letter-spacing: 1.5px; }
+.bx-pp-subtitle { font-size: 12px; color: var(--bx-text-muted); margin-top: 2px; letter-spacing: 0.5px; }
+
+.bx-pp-body { display: flex; gap: 22px; padding: 24px; }
+.bx-pp-photo {
+    width: 120px;
+    height: 150px;
+    flex: 0 0 auto;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bx-text-muted);
+    overflow: hidden;
+}
+.bx-pp-photo svg { width: 56px; height: 56px; opacity: 0.6; }
+
+.bx-pp-fields { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.bx-pp-field { display: flex; flex-direction: column; gap: 2px; }
+.bx-pp-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--bx-text-muted); }
+.bx-pp-value { font-size: 15px; font-weight: 700; color: var(--bx-text); }
+
+.bx-pp-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 16px 24px 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.bx-pp-sign-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--bx-text-muted); }
+.bx-pp-signature {
+    font-size: 26px;
+    font-style: italic;
+    font-family: 'Segoe Script', 'Brush Script MT', cursive;
+    color: var(--bx-accent-soft);
+    margin-top: 2px;
+}
+.bx-pp-close {
+    padding: 9px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--bx-text);
+    background: color-mix(in srgb, var(--bx-surface) 80%, transparent);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    transition: transform var(--bx-press) ease, filter 160ms ease;
+}
+.bx-pp-close:hover { filter: brightness(1.2); }
+.bx-pp-close:active { transform: scale(0.96); }

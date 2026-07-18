@@ -1,0 +1,81 @@
+/* ---------------------------------------------------------------------------
+   theme.css — global reset, design tokens, shared glassmorphism primitives.
+   All colours/sizes come from CSS custom properties that Lua overrides at
+   runtime (bridge.js -> applyTheme). Values below are safe defaults.
+--------------------------------------------------------------------------- */
+
+:root {
+    /* Colours */
+    --bx-accent:        #4FC3F7;
+    --bx-accent-soft:   #81D4FA;
+    --bx-bg:            #0E1116;
+    --bx-surface:       #161B22;
+    --bx-text:          #F5F7FA;
+    --bx-text-muted:    #9AA4B2;
+    --bx-stranger:      #B0BEC5;
+    --bx-known:         #4FC3F7;
+    --bx-success:       #4CAF7D;
+    --bx-danger:        #E5534B;
+    --bx-warning:       #E3A008;
+
+    /* Glass */
+    --bx-blur:          14px;
+    --bx-ind-blur:      8px;
+    --bx-glass-opacity: 0.55;
+    --bx-border-opacity:0.18;
+    --bx-shadow:        0 10px 30px rgba(0, 0, 0, 0.45);
+
+    /* Glow */
+    --bx-glow-color:    #4FC3F7;
+    --bx-glow:          18px;
+    --bx-glow-pulse:    26px;
+
+    /* Typography */
+    --bx-font:          'Inter', 'Segoe UI', system-ui, sans-serif;
+    --bx-label-size:    15px;
+    --bx-id-size:       12px;
+    --bx-weight:        600;
+
+    /* Animation timings */
+    --bx-fade-in:       220ms;
+    --bx-fade-out:      180ms;
+    --bx-menu-open:     260ms;
+    --bx-menu-close:    200ms;
+    --bx-press:         120ms;
+    --bx-breathing:     2600ms;
+    --bx-scale-spring:  320ms;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+    font-family: var(--bx-font);
+    color: var(--bx-text);
+}
+
+.bx-hidden { display: none !important; }
+
+/* Shared glass surface. */
+.bx-glass {
+    background: color-mix(in srgb, var(--bx-surface) calc(var(--bx-glass-opacity) * 100%), transparent);
+    -webkit-backdrop-filter: blur(var(--bx-blur));
+    backdrop-filter: blur(var(--bx-blur));
+    border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
+    box-shadow: var(--bx-shadow);
+}
+
+/* Easing curves. */
+:root {
+    --bx-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --bx-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
