@@ -1,0 +1,114 @@
+/* ---------------------------------------------------------------------------
+   indicator.css — the floating, world-anchored player indicator.
+   Positioned in screen space by JS (left/top %), billboarded by nature (2D).
+--------------------------------------------------------------------------- */
+
+#indicator-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bx-indicator {
+    position: absolute;
+    /* left/top set inline by JS; translate centers on the anchor point. */
+    transform: translate(-50%, -50%) scale(var(--bx-s, 1));
+    transform-origin: center bottom;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transition:
+        opacity var(--bx-fade-in) var(--bx-ease-out),
+        transform var(--bx-scale-spring) var(--bx-ease-out);
+    will-change: transform, opacity, left, top;
+}
+
+.bx-indicator.bx-in { opacity: 1; }
+.bx-indicator.bx-out {
+    opacity: 0;
+    transition: opacity var(--bx-fade-out) var(--bx-ease-out);
+}
+
+/* Name / ID card. */
+.bx-ind-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 7px 14px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--bx-bg) 62%, transparent);
+    -webkit-backdrop-filter: blur(var(--bx-ind-blur));
+    backdrop-filter: blur(var(--bx-ind-blur));
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+    line-height: 1.15;
+    white-space: nowrap;
+}
+
+.bx-ind-name {
+    font-size: var(--bx-label-size);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    color: var(--bx-stranger);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+.bx-indicator.bx-known .bx-ind-name {
+    color: var(--bx-known);
+}
+
+.bx-ind-id {
+    font-size: var(--bx-id-size);
+    font-weight: 600;
+    color: var(--bx-text-muted);
+    margin-top: 1px;
+}
+
+/* Small anchor dot under the card. */
+.bx-ind-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--bx-stranger);
+    box-shadow: 0 0 10px 1px color-mix(in srgb, var(--bx-stranger) 70%, transparent);
+    opacity: 0.85;
+}
+.bx-indicator.bx-known .bx-ind-dot {
+    background: var(--bx-known);
+    box-shadow: 0 0 12px 2px var(--bx-glow-color);
+}
+
+/* Circular G interaction button (only on the active target). */
+.bx-ind-key {
+    display: none;
+    margin-top: 2px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--bx-text);
+    background: color-mix(in srgb, var(--bx-surface) 70%, transparent);
+    -webkit-backdrop-filter: blur(var(--bx-ind-blur));
+    backdrop-filter: blur(var(--bx-ind-blur));
+    border: 1px solid color-mix(in srgb, var(--bx-accent) 55%, transparent);
+    box-shadow: 0 0 var(--bx-glow) color-mix(in srgb, var(--bx-glow-color) 60%, transparent);
+    animation: bx-breathe var(--bx-breathing) var(--bx-ease-in-out) infinite;
+}
+
+.bx-indicator.bx-target .bx-ind-key { display: flex; }
+
+@keyframes bx-breathe {
+    0%, 100% {
+        box-shadow: 0 0 var(--bx-glow) color-mix(in srgb, var(--bx-glow-color) 45%, transparent);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 var(--bx-glow-pulse) color-mix(in srgb, var(--bx-glow-color) 85%, transparent);
+        transform: scale(1.06);
+    }
+}
