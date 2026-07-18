@@ -17,9 +17,10 @@
         submenu   (table?)  nested entries (opens a new radial ring)
         enabled   (bool?)   default true; false = greyed out / future feature
 
-    Ordering: entries are laid out starting at the LEFT of the ring and running
-    counter-clockwise (left -> down -> bottom -> right -> up), so entry #1 sits
-    at the 9 o'clock position. See render() in web/js/radial.js.
+    Ordering: entry #1 always sits at the TOP (12 o'clock) of the ring, and the
+    remaining entries run counter-clockwise from there (top -> left -> bottom
+    -> right -> back up). Applies to every ring, including submenus.
+    See render() in web/js/radial.js.
 
     `action` values are handled in client/modules/radial.lua -> dispatch().
     Keeping actions as strings (not functions) keeps this file pure data and
@@ -32,7 +33,7 @@ Bitirim.Menu = {
     -- Center hub label shown in the middle of the radial.
     centerLabel = 'Player Interaction',
 
-    -- Top-level ring, in display order (1 = left, then counter-clockwise).
+    -- Top-level ring, in display order (1 = top, then counter-clockwise).
     entries = {
         -- 1 --------------------------------------------------------------
         {

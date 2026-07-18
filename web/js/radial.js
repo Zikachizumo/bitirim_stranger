@@ -46,9 +46,9 @@
         const radius = n <= 6 ? 150 : 165;
 
         entries.forEach((entry, i) => {
-            // Entry #1 sits at the LEFT (9 o'clock) and the ring runs
-            // counter-clockwise from there: left -> down -> bottom -> right -> up.
-            const angle = Math.PI - (Math.PI * 2 * i) / n;
+            // Entry #1 always sits at the TOP (12 o'clock); the ring then runs
+            // counter-clockwise: top -> left -> bottom -> right -> back up.
+            const angle = -Math.PI / 2 - (Math.PI * 2 * i) / n;
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
 
