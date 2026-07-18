@@ -28,6 +28,8 @@
         'gang.svg':      P('<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 11a3 3 0 100-6"/>'),
         'vehicle.svg':   P('<path d="M4 13l2-5h12l2 5v5H4z"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/>'),
         'house.svg':     P('<path d="M4 11l8-6 8 6v9H4z"/><path d="M10 20v-5h4v5"/>'),
+        'interactive.svg': P('<path d="M9 11V5.5a1.5 1.5 0 013 0V11"/><path d="M12 11V4.5a1.5 1.5 0 013 0V11"/><path d="M15 11V6.5a1.5 1.5 0 013 0V13c0 4-2.5 7-6 7s-6-3-6-7v-2a1.5 1.5 0 013 0"/>'),
+        'illegal.svg':   P('<path d="M4 9c4-2 12-2 16 0v3c0 3.5-3.5 6-8 6s-8-2.5-8-6z"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/>'),
         'animations.svg':P('<circle cx="12" cy="5" r="2"/><path d="M12 7v6M8 20l4-7 4 7M6 11l6 2 6-2"/>'),
         'phone.svg':     P('<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/>'),
         'default':       P('<circle cx="12" cy="12" r="8"/>'),
@@ -44,7 +46,9 @@
         const radius = n <= 6 ? 150 : 165;
 
         entries.forEach((entry, i) => {
-            const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
+            // Entry #1 sits at the LEFT (9 o'clock) and the ring runs
+            // counter-clockwise from there: left -> down -> bottom -> right -> up.
+            const angle = Math.PI - (Math.PI * 2 * i) / n;
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
 
