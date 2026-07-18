@@ -25,14 +25,22 @@ end
 AddEventHandler('QBCore:Client:OnPlayerLoaded', sendReady)
 RegisterNetEvent('qbx_core:client:playerLoaded', sendReady)
 
--- If the resource (re)starts while already in-game, catch up.
+--- Robustly detect a loaded character across qbx versions.
+local function isCharLoaded()
+    if LocalPlayer.state.isLoggedIn then return true end
+    local ok, pd = pcall(function() return exports.qbx_core:GetPlayerData() end)
+    return ok and pd ~= nil and pd.citizenid ~= nil
+end
+
+-- Keep watching: fires once the character is loaded, and re-arms after an
+-- unload. No fixed timeout window, so slow multichar selection and live
+-- resource restarts are all covered.
 CreateThread(function()
-    for _ = 1, 20 do
-        if LocalPlayer.state.isLoggedIn then
+    while true do
+        if not hasSignalled and isCharLoaded() then
             sendReady()
-            return
         end
-        Wait(1000)
+        Wait(2000)
     end
 end)
 

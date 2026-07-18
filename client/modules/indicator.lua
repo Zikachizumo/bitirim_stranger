@@ -1,33 +1,28 @@
 --[[
     client/modules/indicator.lua
     ----------------------------
-    Projects each tracked player's waist bone to screen space and feeds the NUI
-    a compact per-frame batch. The NUI owns all the visual work (billboarding,
-    fade in/out, scaling, glassmorphism) — Lua only supplies coordinates + state.
+    Projects two world anchors per tracked player to screen space each frame:
+        1. Name/ID label   -> slightly above the HEAD bone (follows the ped)
+        2. Circular G key   -> chest / waist bone (interaction target only)
 
-    One SendNUIMessage per frame carries ALL indicators (not one per player),
-    keeping the NUI bridge cheap.
+    Fixed size, no fade/scale animation — the label is simply pinned in world
+    space and tracks the character. One SendNUIMessage per frame carries all
+    indicators.
 ]]
 
-local Utils = Bitirim.Utils
 local Cfg = Bitirim.Config
-local Theme = Bitirim.Theme
-
 local perfCfg = Cfg.performance
-local boneId = perfCfg.anchorBone
-local heightOffset = perfCfg.anchorHeightOffset
 
-local scaleMin = Theme.scale.min
-local scaleMax = Theme.scale.max
-local scaleBase = Theme.scale.base
-local maxDist = Cfg.interaction.indicatorDistance
+local labelBone = perfCfg.labelBone
+local labelOff = perfCfg.labelHeightOffset
+local keyBone = perfCfg.keyBone
+local keyOff = perfCfg.keyHeightOffset
 
 CreateThread(function()
     local wasActive = false
     while true do
         local tracked = Bitirim.Proximity.tracked
         local target = Bitirim.Proximity.target
-        local wait = 0
 
         if tracked and #tracked > 0 then
             local items = {}
@@ -35,19 +30,21 @@ CreateThread(function()
                 local t = tracked[i]
                 local ped = t.ped
                 if DoesEntityExist(ped) then
-                    local coords = GetPedBoneCoords(ped, boneId, 0.0, 0.0, heightOffset)
-                    local onScreen, sx, sy = GetScreenCoordFromWorldCoord(coords.x, coords.y, coords.z)
-                    if onScreen then
+                    -- Label anchor: just above the head bone.
+                    local head = GetPedBoneCoords(ped, labelBone, 0.0, 0.0, 0.0)
+                    local lok, lx, ly = GetScreenCoordFromWorldCoord(head.x, head.y, head.z + labelOff)
+                    if lok then
+                        -- Key anchor: chest / waist bone.
+                        local chest = GetPedBoneCoords(ped, keyBone, 0.0, 0.0, keyOff)
+                        local kok, kx, ky = GetScreenCoordFromWorldCoord(chest.x, chest.y, chest.z)
                         local label = Bitirim.Identity.label(t.serverId)
-                        local scale = Utils.remap(t.dist, 0.0, maxDist, scaleMax, scaleMin) * scaleBase
                         items[#items + 1] = {
                             id = t.serverId,
-                            x = sx,                 -- 0..1 screen space
-                            y = sy,
-                            scale = scale,
+                            sid = t.serverId,
                             name = label.name,
                             known = label.known,
-                            sid = t.serverId,
+                            labelX = lx, labelY = ly,
+                            keyX = kx, keyY = ky, keyOn = kok,
                             isTarget = (target == t.serverId),
                         }
                     end
@@ -55,14 +52,13 @@ CreateThread(function()
             end
             SendNUIMessage({ action = 'indicators', items = items })
             wasActive = true
+            Wait(perfCfg.renderInterval)
         else
             if wasActive then
                 SendNUIMessage({ action = 'indicators', items = {} })
                 wasActive = false
             end
-            wait = 200
+            Wait(200)
         end
-
-        Wait(perfCfg.renderInterval > 0 and perfCfg.renderInterval or wait)
     end
 end)

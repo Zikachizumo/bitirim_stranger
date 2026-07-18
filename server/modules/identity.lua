@@ -79,6 +79,11 @@ end
 -- QUERIES
 ---------------------------------------------------------------------------
 
+--- Is this source registered as a ready/online character? (diagnostics)
+function Identity.isRegistered(source)
+    return cidBySource[source] ~= nil
+end
+
 --- Does ownerCid know knownCid?
 function Identity.knows(ownerCid, knownCid)
     if ownerCid == knownCid then return true end

@@ -13,6 +13,9 @@
     const CIRC = 2 * Math.PI * R;
 
     let rafId = null;
+    let promptActive = false;
+    let acceptKey = 'Y';
+    let declineKey = 'N';
 
     // Inline person placeholder for the photo slot (no external asset needed).
     const PHOTO_SVG =
@@ -22,9 +25,12 @@
     /* ----- REQUEST PROMPT ----- */
     function showPrompt(data) {
         cancelCountdown();
+        promptActive = true;
         const total = (data.timeout || 10);
-        const accKey = (window.Bitirim.config.acceptKey || 'Y');
-        const decKey = (window.Bitirim.config.declineKey || 'N');
+        acceptKey = (window.Bitirim.config.acceptKey || 'Y');
+        declineKey = (window.Bitirim.config.declineKey || 'N');
+        const accKey = acceptKey;
+        const decKey = declineKey;
 
         promptEl.innerHTML = `
             <div class="bx-prompt-card bx-glass">
@@ -77,6 +83,7 @@
 
     function hidePrompt() {
         cancelCountdown();
+        promptActive = false;
         promptEl.classList.remove('bx-show');
         setTimeout(() => {
             promptEl.classList.add('bx-hidden');
@@ -143,6 +150,20 @@
         if (e.key === 'Escape' && modalEl.classList.contains('bx-show')) {
             e.preventDefault();
             window.Bitirim.post('bitirim:passportClose', {});
+            return;
+        }
+        // Y / N answer the request prompt (NUI has keep-input focus while shown).
+        if (promptActive) {
+            const k = (e.key || '').toLowerCase();
+            if (k === acceptKey.toLowerCase()) {
+                e.preventDefault();
+                window.Bitirim.post('bitirim:passportRespond', { accepted: true });
+                hidePrompt();
+            } else if (k === declineKey.toLowerCase()) {
+                e.preventDefault();
+                window.Bitirim.post('bitirim:passportRespond', { accepted: false });
+                hidePrompt();
+            }
         }
     });
 

@@ -53,13 +53,18 @@ Bitirim.Config = {
         scanIntervalMid  = 200,    -- players around but out of range
         scanIntervalIdle = 1000,   -- nobody nearby -> relax
 
-        -- Screen-projection update interval (ms). 0 = every frame (smoothest).
+        -- Screen-projection update interval (ms). 0 = every frame (so the
+        -- label tracks the character smoothly). This is position tracking,
+        -- not a visual animation.
         renderInterval = 0,
 
-        -- Bone used to anchor the indicator (waist / lower chest).
-        -- 11816 = SKEL_Spine3 (upper chest). 24818 = SKEL_Spine0 (waist).
-        anchorBone = 24818,        -- waist / lower chest
-        anchorHeightOffset = 0.0,  -- fine-tune vertical offset in metres
+        -- The name/ID label sits slightly ABOVE the head and follows the ped.
+        labelBone = 31086,          -- SKEL_Head
+        labelHeightOffset = 0.35,   -- metres above the head bone
+
+        -- The circular G button stays at chest / waist height.
+        keyBone = 24818,            -- SKEL_Spine3 (upper chest / waist area)
+        keyHeightOffset = 0.0,      -- fine-tune vertical offset in metres
     },
 
     ---------------------------------------------------------------------------

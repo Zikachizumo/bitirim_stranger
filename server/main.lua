@@ -8,7 +8,7 @@
 
 local Utils = Bitirim.Utils
 local Identity = Bitirim.Identity
-local Passport = Bitirim.Passport
+local Passport = Bitirim.PassportService
 
 ---------------------------------------------------------------------------
 -- READY HANDSHAKE

@@ -1,49 +1,47 @@
 /* ---------------------------------------------------------------------------
    indicator.js — reconciles the per-frame indicator batch from Lua into DOM.
-   Creates elements on first sight (fade in), updates position/scale/label
-   every frame, and fades out elements that leave the batch.
+
+   Each player has TWO independent elements positioned separately:
+     .bx-ind-label  name + ID, pinned above the head, follows the ped
+     .bx-ind-key    circular G, at chest/waist, only for the interaction target
+
+   No fade / scale / breathing animation — elements appear and track instantly.
 --------------------------------------------------------------------------- */
 
 (function () {
     'use strict';
 
     const layer = document.getElementById('indicator-layer');
-    const els = new Map();          // id -> { root, name, id, removing }
-    const REMOVE_MS = 220;          // must be >= --bx-fade-out
+    const els = new Map();   // id -> { label, name, id, key }
 
     function create(id) {
-        const root = document.createElement('div');
-        root.className = 'bx-indicator';
-        root.innerHTML = `
-            <div class="bx-ind-card">
-                <div class="bx-ind-name"></div>
-                <div class="bx-ind-id"></div>
-            </div>
-            <div class="bx-ind-dot"></div>
-            <div class="bx-ind-key">G</div>`;
-        layer.appendChild(root);
+        const label = document.createElement('div');
+        label.className = 'bx-ind-label';
+        label.innerHTML = '<div class="bx-ind-name"></div><div class="bx-ind-id"></div>';
+        layer.appendChild(label);
+
+        const key = document.createElement('div');
+        key.className = 'bx-ind-key';
+        key.textContent = 'G';
+        key.style.display = 'none';
+        layer.appendChild(key);
+
         const rec = {
-            root: root,
-            name: root.querySelector('.bx-ind-name'),
-            id: root.querySelector('.bx-ind-id'),
-            removing: false,
+            label: label,
+            name: label.querySelector('.bx-ind-name'),
+            id: label.querySelector('.bx-ind-id'),
+            key: key,
         };
-        // Force reflow then fade in.
-        requestAnimationFrame(() => root.classList.add('bx-in'));
         els.set(id, rec);
         return rec;
     }
 
-    function remove(id) {
+    function removeEl(id) {
         const rec = els.get(id);
-        if (!rec || rec.removing) return;
-        rec.removing = true;
-        rec.root.classList.remove('bx-in');
-        rec.root.classList.add('bx-out');
-        setTimeout(() => {
-            if (rec.root.parentNode) rec.root.parentNode.removeChild(rec.root);
-            els.delete(id);
-        }, REMOVE_MS);
+        if (!rec) return;
+        if (rec.label.parentNode) rec.label.parentNode.removeChild(rec.label);
+        if (rec.key.parentNode) rec.key.parentNode.removeChild(rec.key);
+        els.delete(id);
     }
 
     function update(items) {
@@ -53,32 +51,28 @@
             const it = items[i];
             seen.add(it.id);
 
-            let rec = els.get(it.id);
-            if (!rec || rec.removing) {
-                // If it was fading out, drop it and recreate cleanly.
-                if (rec && rec.removing) {
-                    if (rec.root.parentNode) rec.root.parentNode.removeChild(rec.root);
-                    els.delete(it.id);
-                }
-                rec = create(it.id);
-            }
+            const rec = els.get(it.id) || create(it.id);
 
-            const root = rec.root;
-            root.style.left = (it.x * 100) + '%';
-            root.style.top = (it.y * 100) + '%';
-            root.style.setProperty('--bx-s', it.scale || 1);
-
-            root.classList.toggle('bx-known', !!it.known);
-            root.classList.toggle('bx-target', !!it.isTarget);
-
+            // Name / ID label — above the head.
+            rec.label.style.left = (it.labelX * 100) + '%';
+            rec.label.style.top = (it.labelY * 100) + '%';
+            rec.label.classList.toggle('bx-known', !!it.known);
             if (rec.name.textContent !== it.name) rec.name.textContent = it.name;
             const idText = 'ID: ' + it.sid;
             if (rec.id.textContent !== idText) rec.id.textContent = idText;
+
+            // G key — chest/waist, target only.
+            if (it.isTarget && it.keyOn) {
+                rec.key.style.display = 'flex';
+                rec.key.style.left = (it.keyX * 100) + '%';
+                rec.key.style.top = (it.keyY * 100) + '%';
+            } else {
+                rec.key.style.display = 'none';
+            }
         }
 
-        // Fade out anything no longer present.
         els.forEach((rec, id) => {
-            if (!seen.has(id)) remove(id);
+            if (!seen.has(id)) removeEl(id);
         });
     }
 

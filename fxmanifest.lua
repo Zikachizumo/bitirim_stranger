@@ -46,6 +46,7 @@ server_scripts {
     'server/modules/players.lua',
     'server/modules/identity.lua',
     'server/modules/passport.lua',
+    'server/modules/debug.lua',   -- loaded but self-disables unless Config.debug
     'server/main.lua',
 }
 
@@ -56,6 +57,7 @@ client_scripts {
     'client/modules/interaction.lua',
     'client/modules/radial.lua',
     'client/modules/passport.lua',
+    'client/modules/debug.lua',   -- loaded but self-disables unless Config.debug
     'client/main.lua',
 }
 
@@ -65,7 +67,7 @@ files {
     'web/index.html',
     'web/css/*.css',
     'web/js/*.js',
-    'web/assets/*.svg',
-    'web/assets/*.png',
-    'web/fonts/*.ttf',
+    -- NOTE: UI icons are inlined in web/js/radial.js and web/js/passport.js,
+    -- so no external asset/font files are shipped. If you later add real
+    -- images/fonts, drop them in web/assets or web/fonts and re-add a glob here.
 }
