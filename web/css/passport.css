@@ -23,8 +23,6 @@
     border-radius: 16px;
     overflow: hidden;
     background: var(--bx-panel-bg);
-    -webkit-backdrop-filter: blur(var(--bx-panel-blur));
-    backdrop-filter: blur(var(--bx-panel-blur));
     border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
     box-shadow: var(--bx-shadow);
 }
@@ -120,8 +118,6 @@
         transform var(--bx-menu-open) var(--bx-ease-out),
         opacity var(--bx-menu-open) var(--bx-ease-out);
     background: var(--bx-panel-bg);
-    -webkit-backdrop-filter: blur(var(--bx-panel-blur));
-    backdrop-filter: blur(var(--bx-panel-blur));
     border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
     box-shadow: var(--bx-shadow);
 }

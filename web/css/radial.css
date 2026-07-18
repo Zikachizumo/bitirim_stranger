@@ -25,8 +25,6 @@
     /* Circular panel sized to the ring, ~25% opacity (see --bx-panel-bg). */
     border-radius: 50%;
     background: var(--bx-panel-bg);
-    -webkit-backdrop-filter: blur(var(--bx-panel-blur));
-    backdrop-filter: blur(var(--bx-panel-blur));
     transform: scale(0.86);
     opacity: 0;
     transition:
@@ -60,8 +58,6 @@
     text-align: center;
     padding: 12px;
     background: color-mix(in srgb, var(--bx-surface) 70%, transparent);
-    -webkit-backdrop-filter: blur(var(--bx-blur));
-    backdrop-filter: blur(var(--bx-blur));
     border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
     box-shadow: var(--bx-shadow), inset 0 0 24px rgba(79, 195, 247, 0.08);
     z-index: 2;
@@ -94,8 +90,6 @@
     border-radius: 20px;
     cursor: pointer;
     background: color-mix(in srgb, var(--bx-surface) 55%, transparent);
-    -webkit-backdrop-filter: blur(var(--bx-ind-blur));
-    backdrop-filter: blur(var(--bx-ind-blur));
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
     transition:

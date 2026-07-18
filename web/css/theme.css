@@ -74,8 +74,6 @@ html, body {
 /* Shared glass surface. */
 .bx-glass {
     background: color-mix(in srgb, var(--bx-surface) calc(var(--bx-glass-opacity) * 100%), transparent);
-    -webkit-backdrop-filter: blur(var(--bx-blur));
-    backdrop-filter: blur(var(--bx-blur));
     border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
     box-shadow: var(--bx-shadow);
 }
