@@ -154,10 +154,17 @@ function Passport.accept(targetSrc, requestId)
     TriggerClientEvent('bitirim:client:passportShow', targetSrc, payload)
 
     -- Receiver permanently learns the sender (one-directional).
-    Identity.learn(targetSrc, senderSrc)
+    local learned = Identity.learn(targetSrc, senderSrc)
+    if not learned then
+        -- Always-on warning: almost always means one side never sent the ready
+        -- handshake, so the server has no citizenid mapping for them.
+        Utils.warn('passport', ('learn FAILED target=%s(reg=%s) sender=%s(reg=%s) — ready handshake missing?')
+            :format(targetSrc, tostring(Identity.isRegistered(targetSrc)),
+                    senderSrc, tostring(Identity.isRegistered(senderSrc))))
+    end
 
     notify(senderSrc, 'success', ('ID %d accepted your passport.'):format(targetSrc))
-    Utils.log('passport', ('accept #%d'):format(requestId))
+    Utils.log('passport', ('accept #%d learned=%s'):format(requestId, tostring(learned)))
 end
 
 --- Receiver declines: nothing changes, sets a short cooldown.

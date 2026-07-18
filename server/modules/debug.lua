@@ -33,7 +33,9 @@ end, false)
 RegisterCommand('bx_ping', function(source)
     local cid = Players.getCitizenId(source)
     local name = Players.getFullName(source)
-    Utils.warn('debug', ('src=%s cid=%s name=%s'):format(source, tostring(cid), tostring(name)))
+    local reg = Identity.isRegistered(source)
+    Utils.warn('debug', ('src=%s cid=%s name=%s registered=%s'):format(
+        source, tostring(cid), tostring(name), tostring(reg)))
 end, false)
 
 Utils.warn('debug', 'DEBUG server commands active: /bx_reveal <id>  /bx_ping')
