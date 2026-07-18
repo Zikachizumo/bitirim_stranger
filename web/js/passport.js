@@ -33,7 +33,7 @@
         const decKey = declineKey;
 
         promptEl.innerHTML = `
-            <div class="bx-prompt-card bx-glass">
+            <div class="bx-prompt-card">
                 <div class="bx-prompt-head">
                     <div class="bx-prompt-ring">
                         <svg width="46" height="46" viewBox="0 0 46 46">

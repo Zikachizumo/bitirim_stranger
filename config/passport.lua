@@ -29,8 +29,11 @@ Bitirim.Passport = {
     -- Ordered list of fields rendered on the passport. Reorder / add freely.
     fields = {
         { key = 'name',        label = 'Name',        source = 'charinfo.__fullname' },
-        { key = 'citizenid',   label = 'Citizen ID',  source = 'citizenid' },
-        { key = 'birthdate',   label = 'Birth Date',  source = 'charinfo.birthdate' },
+        -- Player (server) ID instead of the citizenid.
+        { key = 'playerid',    label = 'Player ID',   source = 'playerid' },
+        -- PLAYER AGE placeholder. Hook this to your level system when it lands
+        -- by pointing `source` at the right metadata key (e.g. 'meta.level').
+        { key = 'playerage',   label = 'PLAYER AGE',  source = 'meta.level' },
         { key = 'gender',      label = 'Gender',      source = 'charinfo.gender', transform = 'gender' },
         { key = 'nationality', label = 'Nationality', source = 'charinfo.nationality' },
     },

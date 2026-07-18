@@ -25,6 +25,13 @@
     --bx-border-opacity:0.18;
     --bx-shadow:        0 10px 30px rgba(0, 0, 0, 0.45);
 
+    /* Window panels (radial ring + center, passport, request prompt).
+       Dark colour, 25% transparent (i.e. 75% opaque). Lower the 75% for a
+       more see-through panel, raise it toward 100% for a more solid one.
+       Full-screen backdrops are removed; only the panel carries this tint. */
+    --bx-panel-bg:      color-mix(in srgb, var(--bx-surface) 75%, transparent);
+    --bx-panel-blur:    10px;
+
     /* Glow */
     --bx-glow-color:    #4FC3F7;
     --bx-glow:          18px;
@@ -68,8 +75,6 @@ html, body {
 /* Shared glass surface. */
 .bx-glass {
     background: color-mix(in srgb, var(--bx-surface) calc(var(--bx-glass-opacity) * 100%), transparent);
-    -webkit-backdrop-filter: blur(var(--bx-blur));
-    backdrop-filter: blur(var(--bx-blur));
     border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
     box-shadow: var(--bx-shadow);
 }

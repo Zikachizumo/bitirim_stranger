@@ -47,7 +47,11 @@ function Players.getFullName(source)
 end
 
 --- Resolve a single passport field value from its config `source` string.
-local function resolveSource(playerData, source, static)
+--- @param srcId number  the player's server id (for the 'playerid' source)
+local function resolveSource(playerData, source, static, srcId)
+    if source == 'playerid' then
+        return srcId
+    end
     if source == 'citizenid' then
         return playerData.citizenid
     end
@@ -95,14 +99,14 @@ function Players.buildPassport(source)
     }
 
     for _, field in ipairs(cfg.fields) do
-        local raw = resolveSource(pd, field.source, field.static)
+        local raw = resolveSource(pd, field.source, field.static, source)
         local value = applyTransform(raw, field.transform)
         if value == nil or value == '' then value = 'N/A' end
         out.fields[#out.fields + 1] = { key = field.key, label = field.label, value = tostring(value) }
     end
 
     if cfg.signature and cfg.signature.enabled then
-        out.signature = resolveSource(pd, cfg.signature.source, cfg.signature.static)
+        out.signature = resolveSource(pd, cfg.signature.source, cfg.signature.static, source)
     end
 
     return out

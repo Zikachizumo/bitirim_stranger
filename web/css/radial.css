@@ -11,21 +11,20 @@
     z-index: 50;
 }
 
+/* Full-screen backdrop fully transparent (no dark, no blur). */
 #radial-blur {
     position: absolute;
     inset: 0;
-    background: rgba(6, 9, 13, 0.35);
-    -webkit-backdrop-filter: blur(var(--bx-blur));
-    backdrop-filter: blur(var(--bx-blur));
-    opacity: 0;
-    transition: opacity var(--bx-menu-open) var(--bx-ease-out);
+    background: transparent;
 }
-#radial-root.bx-open #radial-blur { opacity: 1; }
 
 #radial-ring {
     position: relative;
     width: 440px;
     height: 440px;
+    /* Circular panel sized to the ring, ~25% opacity (see --bx-panel-bg). */
+    border-radius: 50%;
+    background: var(--bx-panel-bg);
     transform: scale(0.86);
     opacity: 0;
     transition:
@@ -58,9 +57,9 @@
     justify-content: center;
     text-align: center;
     padding: 12px;
-    background: color-mix(in srgb, var(--bx-surface) 70%, transparent);
-    -webkit-backdrop-filter: blur(var(--bx-blur));
-    backdrop-filter: blur(var(--bx-blur));
+    /* Transparent so the ring's dark 25% tint shows through uniformly
+       (avoids a doubled, darker centre from stacking two panels). */
+    background: transparent;
     border: 1px solid rgba(255, 255, 255, var(--bx-border-opacity));
     box-shadow: var(--bx-shadow), inset 0 0 24px rgba(79, 195, 247, 0.08);
     z-index: 2;
@@ -93,8 +92,6 @@
     border-radius: 20px;
     cursor: pointer;
     background: color-mix(in srgb, var(--bx-surface) 55%, transparent);
-    -webkit-backdrop-filter: blur(var(--bx-ind-blur));
-    backdrop-filter: blur(var(--bx-ind-blur));
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
     transition:
