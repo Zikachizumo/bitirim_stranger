@@ -54,12 +54,10 @@ Bitirim.Passport = {
     -- LICENSES (architecture placeholder — data-driven for future rollout)
     ---------------------------------------------------------------------------
     licenses = {
-        driver   = { label = 'Driver License',   metaKey = 'licences.driver' },
-        weapon   = { label = 'Weapon License',   metaKey = 'licences.weapon' },
-        fishing  = { label = 'Fishing License',  metaKey = 'licences.fishing' },
-        pilot    = { label = 'Pilot License',    metaKey = 'licences.pilot' },
-        boat     = { label = 'Boat License',     metaKey = 'licences.boat' },
-        medical  = { label = 'Medical License',  metaKey = 'licences.medical' },
-        business = { label = 'Business License', metaKey = 'licences.business' },
+        driver           = { label = 'Driver License',   metaKey = 'licences.driver' },
+        weapon           = { label = 'Weapon License',   metaKey = 'licences.weapon' },
+        pilot            = { label = 'Pilot License',    metaKey = 'licences.pilot' },
+        boat             = { label = 'Boat License',     metaKey = 'licences.boat' },
+        health_insurance = { label = 'Health Insurance', metaKey = 'licences.medical' },
     },
 }

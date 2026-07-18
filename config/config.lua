@@ -37,6 +37,11 @@ Bitirim.Config = {
 
         -- Only allow interaction when both players are on foot (not in a vehicle).
         onFootOnly = true,
+
+        -- Failsafe: force-close the radial menu if it somehow stays open this
+        -- long (e.g. the player alt-tabbed and the NUI stopped receiving keys).
+        -- Set to 0 to disable the timeout.
+        radialTimeout = 30,        -- seconds
     },
 
     ---------------------------------------------------------------------------

@@ -27,6 +27,7 @@
         'medical.svg':   P('<path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6z"/><path d="M12 9v5M9.5 11.5h5"/>'),
         'gang.svg':      P('<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><path d="M16 11a3 3 0 100-6"/>'),
         'vehicle.svg':   P('<path d="M4 13l2-5h12l2 5v5H4z"/><circle cx="8" cy="18" r="1.5"/><circle cx="16" cy="18" r="1.5"/>'),
+        'house.svg':     P('<path d="M4 11l8-6 8 6v9H4z"/><path d="M10 20v-5h4v5"/>'),
         'animations.svg':P('<circle cx="12" cy="5" r="2"/><path d="M12 7v6M8 20l4-7 4 7M6 11l6 2 6-2"/>'),
         'phone.svg':     P('<rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/>'),
         'default':       P('<circle cx="12" cy="12" r="8"/>'),
@@ -97,6 +98,16 @@
         }
     }
 
+    /** Hard close, whatever submenu depth we are at. */
+    function requestClose() {
+        window.Bitirim.post('bitirim:radialClose', {});
+    }
+
+    /** Keep DOM keyboard focus on the page so Escape always reaches us. */
+    function ensureFocus() {
+        try { root.focus({ preventScroll: true }); } catch (e) { try { root.focus(); } catch (e2) {} }
+    }
+
     function open(data) {
         if (!menu) return;
         baseCenter = data.centerLabel || menu.centerLabel || 'Player Interaction';
@@ -104,8 +115,12 @@
         stack = [menu.entries];
         isOpen = true;
         root.classList.remove('bx-hidden', 'bx-closing');
+        root.setAttribute('tabindex', '-1');
         render();
-        requestAnimationFrame(() => root.classList.add('bx-open'));
+        requestAnimationFrame(() => {
+            root.classList.add('bx-open');
+            ensureFocus();
+        });
     }
 
     function close() {
@@ -126,6 +141,26 @@
             e.preventDefault();
             goBackOrClose();
         }
+    });
+
+    // Clicking anywhere outside the ring closes the menu. Without this the
+    // only exits were Escape and picking an item, so a lost keyboard focus
+    // left no way out at all.
+    document.getElementById('radial-blur').addEventListener('mousedown', function () {
+        if (isOpen) requestClose();
+    });
+
+    // Alt-tabbing away used to strand the menu open (the page stops receiving
+    // key events). Close on blur, and re-take focus if we come back still open.
+    window.addEventListener('blur', function () {
+        if (isOpen) requestClose();
+    });
+    window.addEventListener('focus', function () {
+        if (isOpen) ensureFocus();
+    });
+    document.addEventListener('visibilitychange', function () {
+        if (!isOpen) return;
+        if (document.hidden) { requestClose(); } else { ensureFocus(); }
     });
 
     // Wire messages.

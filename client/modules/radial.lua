@@ -31,6 +31,25 @@ function Radial.open(targetServerId)
         centerLabel = Bitirim.Menu.centerLabel,
         targetId = targetServerId,
     })
+
+    -- Watchdog. Alt-tabbing can leave the NUI without keyboard focus, which
+    -- used to strand the menu open with input locked. We re-assert focus every
+    -- tick (restoring it after a window switch) and hard-close after a timeout
+    -- so the player can never get permanently stuck.
+    local timeoutMs = (Bitirim.Config.interaction.radialTimeout or 0) * 1000
+    CreateThread(function()
+        local openedAt = GetGameTimer()
+        while isOpen do
+            Wait(500)
+            if not isOpen then break end
+            SetNuiFocus(true, true)
+            if timeoutMs > 0 and (GetGameTimer() - openedAt) > timeoutMs then
+                Utils.log('radial', 'watchdog force-closed the menu')
+                Radial.close()
+                break
+            end
+        end
+    end)
 end
 
 --- Close the radial menu and release focus.
