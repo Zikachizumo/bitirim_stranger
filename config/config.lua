@@ -131,7 +131,7 @@ Bitirim.Config = {
         -- author in a styleable span.
 
         -- Longer messages are cut off at this length. 0 disables the limit.
-        maxLength = 40,
+        maxLength = 37,
 
         -- Proximity chat: only players within this many metres receive the
         -- message. Set to 0 to broadcast to the whole server instead.
