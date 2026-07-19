@@ -30,34 +30,6 @@ local Players = Bitirim.Players
 local Identity = Bitirim.Identity
 local strangerLabel = Bitirim.Config.identity.strangerLabel
 
-local TEMPLATE_ID = 'bitirimChat'
-
----------------------------------------------------------------------------
--- TEMPLATE
----------------------------------------------------------------------------
-
-local function templateHtml()
-    return ('<span style="color:%s">{0}</span> <span style="color:%s">{1}</span>')
-        :format(Cfg.authorColor or '#FF8C00', Cfg.messageColor or '#FFFFFF')
-end
-
-local function registerTemplate(target)
-    TriggerClientEvent('chat:addTemplate', target, TEMPLATE_ID, templateHtml())
-end
-
--- Templates live on the client, so (re)register on join and on resource start
--- for anyone already connected.
-AddEventHandler('playerJoining', function()
-    registerTemplate(source)
-end)
-
-AddEventHandler('onResourceStart', function(res)
-    if res ~= GetCurrentResourceName() then return end
-    for _, p in ipairs(GetPlayers()) do
-        registerTemplate(tonumber(p))
-    end
-end)
-
 ---------------------------------------------------------------------------
 -- DELIVERY
 ---------------------------------------------------------------------------
@@ -107,8 +79,10 @@ AddEventHandler('chatMessage', function(source, _, message)
         local target = tonumber(p)
         if target and inRange(senderCoords, target) then
             heard = heard + 1
+            -- Two args, no templateId: qbx_chat_theme's own `default` template
+            -- wraps {0} in <span class="author">, which is what lets the name
+            -- be coloured separately in app.css.
             TriggerClientEvent('chat:addMessage', target, {
-                templateId = TEMPLATE_ID,
                 args = { (Cfg.authorFormat):format(labelFor(target, senderCid, senderName), idText), message },
             })
         end

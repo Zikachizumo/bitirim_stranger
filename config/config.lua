@@ -126,10 +126,9 @@ Bitirim.Config = {
         --   %s = permanent player id
         authorFormat = '%s (%s):',
 
-        -- Colours are baked into our own chat template rather than relying on
-        -- the theme's CSS, so nothing can override them.
-        authorColor = '#FF8C00',     -- name + id
-        messageColor = '#FFFFFF',    -- the message body
+        -- Colours live in qbx_chat_theme/theme/app.css (.author and
+        -- .message-wrapper) — the theme's own template already wraps the
+        -- author in a styleable span.
 
         -- Longer messages are cut off at this length. 0 disables the limit.
         maxLength = 68,
