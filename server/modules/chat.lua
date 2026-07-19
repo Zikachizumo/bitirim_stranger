@@ -58,8 +58,10 @@ AddEventHandler('chatMessage', function(source, _, message)
         target = tonumber(target)
         if target then
             local label = labelFor(target, senderCid, senderName)
+            -- Two args: the theme renders the first as .author, so the name
+            -- and the message body can be styled in different colours.
             TriggerClientEvent('chat:addMessage', target, {
-                args = { (Cfg.format):format(label, idText, message) },
+                args = { (Cfg.authorFormat):format(label, idText), message },
             })
         end
     end

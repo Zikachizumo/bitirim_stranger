@@ -121,12 +121,11 @@ Bitirim.Config = {
     chat = {
         enabled = true,
 
-        -- Rendered as a single line. Order of the placeholders:
+        -- The author label is sent separately from the message so the chat
+        -- theme can colour them independently (see .author in app.css).
         --   %s = name or the stranger label
         --   %s = permanent player id
-        --   %s = the message
-        -- FiveM colour codes (^0-^9) work here.
-        format = '%s (%s): %s',
+        authorFormat = '%s (%s):',
     },
 
     ---------------------------------------------------------------------------
