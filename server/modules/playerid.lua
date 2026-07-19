@@ -59,10 +59,16 @@ function PlayerId.ensure(citizenid)
     local cached = byCitizenId[citizenid]
     if cached then return cached end
 
-    -- Race-safe: whichever insert loses is simply ignored, and both callers
-    -- read back the identical row.
-    MySQL.insert.await('INSERT IGNORE INTO bitirim_player_ids (citizenid) VALUES (?)', { citizenid })
+    -- Look up first: an already-registered character must NOT trigger an
+    -- INSERT, because a failed INSERT IGNORE still burns an AUTO_INCREMENT
+    -- value (leaving gaps like 1,2,12,41...). We only insert for brand-new
+    -- citizenids, then read the row back. Race-safe: if a concurrent insert
+    -- wins, INSERT IGNORE is a no-op and the follow-up SELECT returns its row.
     local row = MySQL.single.await('SELECT number FROM bitirim_player_ids WHERE citizenid = ?', { citizenid })
+    if not row then
+        MySQL.insert.await('INSERT IGNORE INTO bitirim_player_ids (citizenid) VALUES (?)', { citizenid })
+        row = MySQL.single.await('SELECT number FROM bitirim_player_ids WHERE citizenid = ?', { citizenid })
+    end
     if not row or not row.number then
         Utils.warn('playerid', 'could not issue a number for ' .. tostring(citizenid))
         return nil
