@@ -129,11 +129,11 @@ function Passport.request(senderSrc, targetSrc)
     TriggerClientEvent('bitirim:client:passportPrompt', targetSrc, {
         requestId = id,
         senderName = senderName,
-        senderServerId = senderSrc,
+        senderServerId = (Bitirim.PlayerId and Bitirim.PlayerId.get(senderSrc)) or senderSrc,
         timeout = Cfg.passport.requestTimeout,
     })
 
-    notify(senderSrc, 'inform', ('Passport request sent to ID %d.'):format(targetSrc))
+    notify(senderSrc, 'inform', ('Passport request sent to ID %d.'):format((Bitirim.PlayerId and Bitirim.PlayerId.get(targetSrc)) or targetSrc))
     Utils.log('passport', ('request #%d %s -> %s'):format(id, senderSrc, targetSrc))
 end
 
@@ -163,7 +163,7 @@ function Passport.accept(targetSrc, requestId)
                     senderSrc, tostring(Identity.isRegistered(senderSrc))))
     end
 
-    notify(senderSrc, 'success', ('ID %d accepted your passport.'):format(targetSrc))
+    notify(senderSrc, 'success', ('ID %d accepted your passport.'):format((Bitirim.PlayerId and Bitirim.PlayerId.get(targetSrc)) or targetSrc))
     Utils.log('passport', ('accept #%d learned=%s'):format(requestId, tostring(learned)))
 end
 
@@ -176,7 +176,7 @@ function Passport.decline(targetSrc, requestId)
     cleanup(requestId)
     cooldowns[cooldownKey(senderSrc, targetSrc)] = now() + Cfg.passport.resendCooldown
 
-    notify(senderSrc, 'error', ('ID %d declined your passport.'):format(targetSrc))
+    notify(senderSrc, 'error', ('ID %d declined your passport.'):format((Bitirim.PlayerId and Bitirim.PlayerId.get(targetSrc)) or targetSrc))
     Utils.log('passport', ('decline #%d'):format(requestId))
 end
 
