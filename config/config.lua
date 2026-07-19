@@ -121,11 +121,22 @@ Bitirim.Config = {
     chat = {
         enabled = true,
 
-        -- The author label is sent separately from the message so the chat
-        -- theme can colour them independently (see .author in app.css).
+        -- The author label is sent separately from the message.
         --   %s = name or the stranger label
         --   %s = permanent player id
         authorFormat = '%s (%s):',
+
+        -- Colours are baked into our own chat template rather than relying on
+        -- the theme's CSS, so nothing can override them.
+        authorColor = '#FF8C00',     -- name + id
+        messageColor = '#FFFFFF',    -- the message body
+
+        -- Longer messages are cut off at this length. 0 disables the limit.
+        maxLength = 68,
+
+        -- Proximity chat: only players within this many metres receive the
+        -- message. Set to 0 to broadcast to the whole server instead.
+        range = 10.0,
     },
 
     ---------------------------------------------------------------------------
