@@ -50,7 +50,9 @@ end
 --- @param srcId number  the player's server id (for the 'playerid' source)
 local function resolveSource(playerData, source, static, srcId)
     if source == 'playerid' then
-        return srcId
+        -- The permanent number, not the volatile session id.
+        local permanent = Bitirim.PlayerId and Bitirim.PlayerId.get(srcId)
+        return permanent or srcId
     end
     if source == 'citizenid' then
         return playerData.citizenid

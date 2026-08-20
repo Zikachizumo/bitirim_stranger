@@ -84,6 +84,31 @@ Bitirim.Config = {
     },
 
     ---------------------------------------------------------------------------
+    -- PERMANENT PLAYER ID
+    -- Each CHARACTER is issued a number once, on first login. It survives
+    -- reconnects and restarts, and is never reused: the registry row is kept
+    -- forever (soft-deleted), and MySQL AUTO_INCREMENT never reissues a value.
+    -- So if character #3 is deleted, the next new character gets #4.
+    ---------------------------------------------------------------------------
+    playerId = {
+        enabled = true,
+
+        -- Display range. Numbering always begins at 1; `max` only drives a
+        -- warning if you ever run past it.
+        max = 999999,
+
+        -- Show the number above the player (alongside Stranger / their name).
+        showOnIndicator = true,
+
+        -- Admin lookup: /whois <number> -> which character owns that number.
+        allowAdminCommands = true,
+        adminCommand = 'whois',
+        -- FiveM ACE permission. Grant with:
+        --   add_ace group.admin bitirim.admin allow
+        adminAce = 'bitirim.admin',
+    },
+
+    ---------------------------------------------------------------------------
     -- IDENTITY / KNOWN-PEOPLE
     ---------------------------------------------------------------------------
     identity = {
